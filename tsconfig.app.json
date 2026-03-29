@@ -21,6 +21,8 @@
     },
 
     /* Linting */
+    "types": ["vite/client"],
+
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
