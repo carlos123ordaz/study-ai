@@ -20,7 +20,7 @@ export const authService = {
   },
 
   getGoogleLoginUrl(): string {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    const apiUrl = import.meta.env.VITE_API_URL;
     return `${apiUrl}/api/auth/google`;
   },
 };
