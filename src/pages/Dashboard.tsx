@@ -90,7 +90,7 @@ export function Dashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold">
             Hola, {user?.name?.split(' ')[0]} 👋
@@ -104,7 +104,7 @@ export function Dashboard() {
             })}
           </p>
         </div>
-        <Button onClick={() => navigate('/quizzes/create')} variant="gradient">
+        <Button onClick={() => navigate('/quizzes/create')} variant="gradient" className="w-full sm:w-auto">
           <Plus className="h-4 w-4" />
           Nuevo quiz
         </Button>
@@ -284,9 +284,9 @@ export function Dashboard() {
       {/* Quick actions */}
       {(user?.credits ?? 0) < 20 && (
         <Card className="border-yellow-500/20 bg-yellow-500/5">
-          <CardContent className="p-5 flex items-center justify-between">
+          <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <Coins className="h-5 w-5 text-yellow-400" />
+              <Coins className="h-5 w-5 text-yellow-400 shrink-0" />
               <div>
                 <p className="text-sm font-semibold">Créditos bajos</p>
                 <p className="text-xs text-muted-foreground">
@@ -297,7 +297,7 @@ export function Dashboard() {
             <Button
               size="sm"
               variant="outline"
-              className="border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
+              className="border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10 w-full sm:w-auto"
               onClick={() => navigate('/credits')}
             >
               Recargar

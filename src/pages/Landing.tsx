@@ -458,7 +458,7 @@ export function Landing() {
             {steps.map((step) => (
               <div
                 key={step.number}
-                className="relative rounded-2xl border border-white/[0.08] bg-card p-8 hover:border-brand-500/30 transition-all duration-200 hover:-translate-y-0.5 group"
+                className="relative rounded-2xl border border-white/[0.08] bg-card p-6 sm:p-8 hover:border-brand-500/30 transition-all duration-200 hover:-translate-y-0.5 group"
               >
                 <div className="text-5xl font-black text-white/5 absolute top-6 right-6 select-none group-hover:text-brand-500/10 transition-colors">
                   {step.number}
@@ -504,7 +504,7 @@ export function Landing() {
           {/* Bento grid: featured card + 3 smaller */}
           <div className="grid md:grid-cols-2 gap-6">
             {/* Featured card — quizzes */}
-            <div className="rounded-2xl border border-brand-500/20 bg-gradient-to-br from-brand-500/10 via-card to-card p-8 md:row-span-2 flex flex-col justify-between">
+            <div className="rounded-2xl border border-brand-500/20 bg-gradient-to-br from-brand-500/10 via-card to-card p-6 sm:p-8 md:row-span-2 flex flex-col justify-between">
               <div>
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/20 px-3 py-1 text-xs font-medium text-brand-400 mb-6">
                   <Star className="h-3 w-3" />
@@ -580,7 +580,7 @@ export function Landing() {
 
             {useCases.map((uc) => (
               <TabsContent key={uc.id} value={uc.id}>
-                <div className="rounded-2xl border border-white/[0.08] bg-card p-8">
+                <div className="rounded-2xl border border-white/[0.08] bg-card p-6 sm:p-8">
                   <h3 className="font-bold text-xl mb-3">{uc.title}</h3>
                   <p className="text-muted-foreground leading-relaxed mb-6">{uc.body}</p>
                   <blockquote className="border-l-2 border-brand-500/50 pl-4">
@@ -647,23 +647,23 @@ export function Landing() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-white/[0.08] overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="rounded-2xl border border-white/[0.08] overflow-hidden overflow-x-auto">
+            <table className="w-full text-sm min-w-[400px]">
               <thead>
                 <tr className="border-b border-white/[0.08]">
-                  <th className="text-left py-4 px-6 text-muted-foreground font-medium">
+                  <th className="text-left py-3 px-4 sm:py-4 sm:px-6 text-muted-foreground font-medium">
                     Característica
                   </th>
-                  <th className="py-4 px-4 text-center">
+                  <th className="py-3 px-3 sm:py-4 sm:px-4 text-center">
                     <span className="inline-flex items-center gap-1.5 text-brand-400 font-semibold">
                       <BookOpen className="h-4 w-4" />
                       StudyAI
                     </span>
                   </th>
-                  <th className="py-4 px-4 text-center text-muted-foreground font-medium">
+                  <th className="py-3 px-3 sm:py-4 sm:px-4 text-center text-muted-foreground font-medium">
                     ChatGPT
                   </th>
-                  <th className="py-4 px-4 text-center text-muted-foreground font-medium">
+                  <th className="py-3 px-3 sm:py-4 sm:px-4 text-center text-muted-foreground font-medium">
                     Manual
                   </th>
                 </tr>
@@ -674,14 +674,14 @@ export function Landing() {
                     key={row.feature}
                     className={i < comparison.length - 1 ? 'border-b border-white/[0.06]' : ''}
                   >
-                    <td className="py-4 px-6 text-muted-foreground">{row.feature}</td>
-                    <td className="py-4 px-4 text-center">
+                    <td className="py-3 px-4 sm:py-4 sm:px-6 text-muted-foreground text-xs sm:text-sm">{row.feature}</td>
+                    <td className="py-3 px-3 sm:py-4 sm:px-4 text-center">
                       <CompareCell value={row.studyai} />
                     </td>
-                    <td className="py-4 px-4 text-center">
+                    <td className="py-3 px-3 sm:py-4 sm:px-4 text-center">
                       <CompareCell value={row.chatgpt} />
                     </td>
-                    <td className="py-4 px-4 text-center">
+                    <td className="py-3 px-3 sm:py-4 sm:px-4 text-center">
                       <CompareCell value={row.manual} />
                     </td>
                   </tr>
@@ -731,7 +731,7 @@ export function Landing() {
 
       {/* ── Final CTA ───────────────────────────────────────────────────────── */}
       <section className="py-24 px-4 border-t border-white/[0.06]">
-        <div className="relative max-w-3xl mx-auto text-center overflow-hidden rounded-3xl border border-brand-500/20 bg-gradient-to-b from-brand-500/10 via-card to-card p-12 md:p-16">
+        <div className="relative max-w-3xl mx-auto text-center overflow-hidden rounded-3xl border border-brand-500/20 bg-gradient-to-b from-brand-500/10 via-card to-card p-8 sm:p-12 md:p-16">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 flex items-center justify-center"
@@ -775,7 +775,7 @@ export function Landing() {
                 — Tu plataforma de estudio con IA
               </span>
             </div>
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
               <a href="#como-funciona" className="hover:text-foreground transition-colors">
                 Cómo funciona
               </a>

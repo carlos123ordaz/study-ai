@@ -32,14 +32,14 @@ export function Summaries() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold">Resúmenes</h1>
           <p className="text-muted-foreground mt-1">
             Resúmenes estructurados generados con IA
           </p>
         </div>
-        <Button variant="gradient" onClick={() => navigate('/documents')}>
+        <Button variant="gradient" onClick={() => navigate('/documents')} className="w-full sm:w-auto">
           <Plus className="h-4 w-4" />
           Nuevo resumen
         </Button>

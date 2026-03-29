@@ -104,14 +104,14 @@ export function Quizzes() {
   return (
     <>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold">Mis Quizzes</h1>
             <p className="text-muted-foreground mt-1">
               Practica con tus quizzes generados por IA
             </p>
           </div>
-          <Button variant="gradient" onClick={() => navigate('/quizzes/create')}>
+          <Button variant="gradient" onClick={() => navigate('/quizzes/create')} className="w-full sm:w-auto">
             <Plus className="h-4 w-4" />
             Nuevo quiz
           </Button>
@@ -179,7 +179,7 @@ export function Quizzes() {
                         <Button
                           size="sm"
                           variant="gradient"
-                          className="opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                           onClick={(e) => {
                             e.stopPropagation();
                             navigate(`/quizzes/${quiz._id}`);
@@ -191,7 +191,7 @@ export function Quizzes() {
                         <Button
                           size="icon"
                           variant="ghost"
-                          className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                          className="h-8 w-8 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                           onClick={(e) => {
                             e.stopPropagation();
                             setConfirmDelete(quiz);

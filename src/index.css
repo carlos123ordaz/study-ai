@@ -45,6 +45,12 @@
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: pan-y;
+  }
+
+  button, a, [role="button"] {
+    touch-action: manipulation;
   }
 
   /* Custom scrollbar */

@@ -186,7 +186,7 @@ export function Documents() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{doc.name}</p>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 flex-wrap">
                       <span>{formatFileSize(doc.size)}</span>
                       {doc.pageCount && (
                         <>
@@ -195,10 +195,10 @@ export function Documents() {
                         </>
                       )}
                       {doc.chunkCount && (
-                        <>
-                          <span>·</span>
-                          <span>{doc.chunkCount} chunks</span>
-                        </>
+                        <span className="hidden sm:inline">
+                          <span className="mx-1">·</span>
+                          {doc.chunkCount} chunks
+                        </span>
                       )}
                       <span>·</span>
                       <span>{formatRelativeTime(doc.createdAt)}</span>
@@ -209,7 +209,7 @@ export function Documents() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                      className="hidden sm:flex h-8 w-8 text-muted-foreground hover:text-foreground"
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/documents/${doc._id}`);
