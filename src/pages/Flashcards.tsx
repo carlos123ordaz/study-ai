@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Zap, Trash2, Plus, Calendar } from 'lucide-react';
 import { flashcardService } from '@/services/flashcardService';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/common/EmptyState';
@@ -56,11 +55,7 @@ export function Flashcards() {
           icon={Zap}
           title="No tenés flashcards todavía"
           description="Generá tu primer set desde cualquier documento procesado."
-          action={
-            <Button variant="gradient" onClick={() => navigate('/documents')}>
-              Ir a documentos
-            </Button>
-          }
+          action={{ label: 'Ir a documentos', onClick: () => navigate('/documents') }}
         />
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
