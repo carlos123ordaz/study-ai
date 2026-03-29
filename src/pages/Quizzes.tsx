@@ -103,7 +103,7 @@ export function Quizzes() {
 
   return (
     <>
-      <div className="space-y-6">
+      <div className="space-y-6 w-full overflow-x-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold">Mis Quizzes</h1>
@@ -137,68 +137,69 @@ export function Quizzes() {
               return (
                 <Card
                   key={quiz._id}
-                  className="hover:border-white/[0.15] transition-colors cursor-pointer group"
+                  className="hover:border-white/[0.15] transition-colors cursor-pointer group overflow-hidden"
                   onClick={() => navigate(`/quizzes/${quiz._id}`)}
                 >
-                  <CardContent className="p-5">
-                    <div className="flex items-center gap-4">
-                      <div className="rounded-xl bg-purple-500/15 p-3 shrink-0">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      <div className="rounded-xl bg-purple-500/15 p-2.5 shrink-0">
                         <Brain className="h-5 w-5 text-purple-400" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold truncate">{quiz.title}</h3>
-                        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                        <div className="flex items-start gap-2 min-w-0">
+                          <h3 className="font-semibold truncate max-w-[150px] sm:max-w-[260px] md:max-w-sm">{quiz.title}</h3>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {bestScore !== null && (
+                              <div className="text-right">
+                                <p className="text-[10px] text-muted-foreground leading-none mb-0.5">Mejor</p>
+                                <p
+                                  className={cn(
+                                    'text-sm font-bold leading-none',
+                                    bestScore >= 80
+                                      ? 'text-green-400'
+                                      : bestScore >= 60
+                                      ? 'text-yellow-400'
+                                      : 'text-red-400'
+                                  )}
+                                >
+                                  {bestScore}%
+                                </p>
+                              </div>
+                            )}
+                            <Button
+                              size="icon"
+                              variant="gradient"
+                              className="h-8 w-8 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/quizzes/${quiz._id}`);
+                              }}
+                            >
+                              <Play className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setConfirmDelete(quiz);
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground flex-wrap">
                           <span className={cn('font-medium', DIFFICULTY_COLORS[quiz.difficulty])}>
                             {DIFFICULTY_LABELS[quiz.difficulty]}
                           </span>
                           <span>·</span>
                           <span>{quiz.questionCount} preguntas</span>
                           <span>·</span>
-                          <Clock className="h-3 w-3" />
+                          <Clock className="h-3 w-3 shrink-0" />
                           <span>{formatRelativeTime(quiz.createdAt)}</span>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        {bestScore !== null && (
-                          <div className="text-right mr-1">
-                            <p className="text-xs text-muted-foreground">Mejor</p>
-                            <p
-                              className={cn(
-                                'text-sm font-bold',
-                                bestScore >= 80
-                                  ? 'text-green-400'
-                                  : bestScore >= 60
-                                  ? 'text-yellow-400'
-                                  : 'text-red-400'
-                              )}
-                            >
-                              {bestScore}%
-                            </p>
-                          </div>
-                        )}
-                        <Button
-                          size="sm"
-                          variant="gradient"
-                          className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/quizzes/${quiz._id}`);
-                          }}
-                        >
-                          <Play className="h-3.5 w-3.5" />
-                          Iniciar
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="h-8 w-8 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setConfirmDelete(quiz);
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
                       </div>
                     </div>
                   </CardContent>

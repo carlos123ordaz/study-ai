@@ -67,7 +67,7 @@ function UploadZone({ onUpload }: { onUpload: (file: File) => void }) {
     <div
       {...getRootProps()}
       className={cn(
-        'border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all',
+        'border-2 border-dashed rounded-xl p-6 sm:p-10 text-center cursor-pointer transition-all',
         isDragActive
           ? 'border-brand-500 bg-brand-500/10'
           : 'border-white/[0.12] hover:border-white/25 hover:bg-accent/50'
@@ -78,7 +78,12 @@ function UploadZone({ onUpload }: { onUpload: (file: File) => void }) {
         <Upload className="h-6 w-6 text-brand-400" />
       </div>
       <p className="text-base font-medium mb-1">
-        {isDragActive ? 'Suelta el PDF aquí' : 'Arrastra un PDF o haz clic para seleccionar'}
+        {isDragActive ? 'Suelta el PDF aquí' : (
+          <>
+            <span className="hidden sm:inline">Arrastra un PDF o haz clic para seleccionar</span>
+            <span className="sm:hidden">Toca para seleccionar un PDF</span>
+          </>
+        )}
       </p>
       <p className="text-sm text-muted-foreground">Solo PDFs · Máximo 20MB</p>
     </div>
@@ -134,7 +139,7 @@ export function Documents() {
   const documents = data?.documents ?? [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full overflow-x-hidden">
       <div>
         <h1 className="text-2xl font-bold">Documentos</h1>
         <p className="text-muted-foreground mt-1">
@@ -179,13 +184,46 @@ export function Documents() {
               className="hover:border-white/[0.15] transition-colors cursor-pointer"
               onClick={() => navigate(`/documents/${doc._id}`)}
             >
-              <CardContent className="p-4">
-                <div className="flex items-center gap-4">
+              <CardContent className="p-4 overflow-hidden">
+                <div className="flex items-center gap-3 min-w-0">
                   <div className="rounded-lg bg-blue-500/15 p-2.5 shrink-0">
                     <FileText className="h-5 w-5 text-blue-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate">{doc.name}</p>
+                    <div className="flex items-start gap-2">
+                      <p className="font-medium truncate max-w-[150px] sm:max-w-[260px] md:max-w-sm pt-0.5">{doc.name}</p>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <StatusBadge status={doc.status} />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="hidden sm:flex h-8 w-8 text-muted-foreground hover:text-foreground"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/documents/${doc._id}`);
+                          }}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeletingId(doc._id);
+                            deleteMutation.mutate(doc._id);
+                          }}
+                          disabled={deletingId === doc._id}
+                        >
+                          {deletingId === doc._id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 flex-wrap">
                       <span>{formatFileSize(doc.size)}</span>
                       {doc.pageCount && (
@@ -203,37 +241,6 @@ export function Documents() {
                       <span>·</span>
                       <span>{formatRelativeTime(doc.createdAt)}</span>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <StatusBadge status={doc.status} />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="hidden sm:flex h-8 w-8 text-muted-foreground hover:text-foreground"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/documents/${doc._id}`);
-                      }}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setDeletingId(doc._id);
-                        deleteMutation.mutate(doc._id);
-                      }}
-                      disabled={deletingId === doc._id}
-                    >
-                      {deletingId === doc._id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <Trash2 className="h-4 w-4" />
-                      )}
-                    </Button>
                   </div>
                 </div>
                 {doc.status === 'failed' && doc.errorMessage && (

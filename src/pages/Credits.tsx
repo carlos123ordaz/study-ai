@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Coins, ArrowUpRight, ArrowDownLeft, Zap, Star } from 'lucide-react';
+import { Coins, Zap, Star } from 'lucide-react';
 import { creditService } from '@/services/creditService';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useUiStore } from '@/store/uiStore';
 import { useCreditsBalance } from '@/hooks/useCreditsBalance';
-import { cn, formatDate } from '@/lib/utils';
-import { CreditTransaction, CreditPackage } from '@/types';
+import { cn } from '@/lib/utils';
+import { CreditPackage } from '@/types';
 
 const PROVIDER_LABELS: Record<string, string> = {
   mercadopago: 'MercadoPago',
@@ -66,46 +65,6 @@ function PackageCard({
   );
 }
 
-function TransactionRow({ tx }: { tx: CreditTransaction }) {
-  const isCredit = tx.amount > 0;
-  const typeLabels: Record<string, string> = {
-    initial_grant: 'Bienvenida',
-    document_processing: 'Procesamiento',
-    quiz_generation: 'Generación quiz',
-    quiz_generation_refund: 'Reembolso quiz',
-    document_processing_refund: 'Reembolso doc.',
-    payment_recharge: 'Recarga',
-    admin_adjustment: 'Ajuste',
-  };
-
-  return (
-    <div className="flex items-center gap-3 py-3 border-b border-white/[0.06] last:border-0">
-      <div
-        className={cn(
-          'rounded-lg p-2 shrink-0',
-          isCredit ? 'bg-green-500/15' : 'bg-red-500/15'
-        )}
-      >
-        {isCredit ? (
-          <ArrowUpRight className="h-4 w-4 text-green-400" />
-        ) : (
-          <ArrowDownLeft className="h-4 w-4 text-red-400" />
-        )}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium truncate">{typeLabels[tx.type] ?? tx.type}</p>
-        <p className="text-xs text-muted-foreground truncate">{tx.description}</p>
-      </div>
-      <div className="text-right shrink-0">
-        <p className={cn('text-sm font-semibold', isCredit ? 'text-green-400' : 'text-red-400')}>
-          {isCredit ? '+' : ''}
-          {tx.amount}
-        </p>
-        <p className="text-xs text-muted-foreground">{formatDate(tx.createdAt)}</p>
-      </div>
-    </div>
-  );
-}
 
 export function Credits() {
   const { credits } = useCreditsBalance();
@@ -126,11 +85,6 @@ export function Credits() {
   const availableProviders = packagesData?.providers ?? [];
   const isMockOnly = availableProviders.length === 1 && availableProviders[0] === 'mock';
   const activeProvider = selectedProvider ?? availableProviders[0] ?? 'mock';
-
-  const { data: transactionsData, isLoading: txLoading } = useQuery({
-    queryKey: ['credit-transactions'],
-    queryFn: () => creditService.getTransactions(),
-  });
 
   const buyMutation = useMutation({
     mutationFn: async (idx: number) => {
@@ -157,8 +111,6 @@ export function Credits() {
       toast.error('Error en el pago', err.message);
     },
   });
-
-  const transactions = transactionsData?.transactions ?? [];
 
   return (
     <div className="space-y-8 max-w-4xl">
@@ -279,27 +231,6 @@ export function Credits() {
         )}
       </div>
 
-      {/* Transaction history */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Historial de transacciones</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {txLoading ? (
-            <div className="space-y-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-12 w-full" />
-              ))}
-            </div>
-          ) : transactions.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
-              No hay transacciones aún.
-            </p>
-          ) : (
-            transactions.map((tx) => <TransactionRow key={tx._id} tx={tx} />)
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 }
