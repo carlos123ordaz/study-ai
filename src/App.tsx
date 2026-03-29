@@ -18,6 +18,10 @@ import { CreateQuiz } from '@/pages/CreateQuiz';
 import { Quizzes } from '@/pages/Quizzes';
 import { TakeQuiz } from '@/pages/TakeQuiz';
 import { QuizResults } from '@/pages/QuizResults';
+import { Flashcards } from '@/pages/Flashcards';
+import { StudyFlashcards } from '@/pages/StudyFlashcards';
+import { Summaries } from '@/pages/Summaries';
+import { ViewSummary } from '@/pages/ViewSummary';
 import { Credits } from '@/pages/Credits';
 import { Profile } from '@/pages/Profile';
 import { PaymentSuccess } from '@/pages/PaymentSuccess';
@@ -121,6 +125,46 @@ export default function App() {
             <ProtectedRoute>
               <MainLayout>
                 <QuizResults />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/flashcards"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Flashcards />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/flashcards/:id"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <StudyFlashcards />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/summaries"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Summaries />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/summaries/:id"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <ViewSummary />
               </MainLayout>
             </ProtectedRoute>
           }

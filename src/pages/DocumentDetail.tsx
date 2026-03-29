@@ -1,16 +1,45 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, FileText, Brain, Calendar, Hash, Layers } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { ArrowLeft, FileText, Brain, Calendar, Hash, Layers, Zap, BookOpen } from 'lucide-react';
 import { documentService } from '@/services/documentService';
+import { flashcardService } from '@/services/flashcardService';
+import { summaryService } from '@/services/summaryService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useUiStore } from '@/store/uiStore';
+import { useAuthStore } from '@/store/authStore';
 import { formatFileSize, formatDate } from '@/lib/utils';
 
 export function DocumentDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { toast } = useUiStore();
+  const user = useAuthStore((s) => s.user);
+  const queryClient = useQueryClient();
+
+  const flashcardMutation = useMutation({
+    mutationFn: () => flashcardService.create(id!),
+    onSuccess: (set) => {
+      queryClient.invalidateQueries({ queryKey: ['flashcards'] });
+      queryClient.invalidateQueries({ queryKey: ['credits'] });
+      toast.success('Flashcards generados', `"${set.title}" está listo.`);
+      navigate(`/flashcards/${set._id}`);
+    },
+    onError: (err: Error) => toast.error('Error al generar flashcards', err.message),
+  });
+
+  const summaryMutation = useMutation({
+    mutationFn: () => summaryService.create(id!),
+    onSuccess: (summary) => {
+      queryClient.invalidateQueries({ queryKey: ['summaries'] });
+      queryClient.invalidateQueries({ queryKey: ['credits'] });
+      toast.success('Resumen generado', `"${summary.title}" está listo.`);
+      navigate(`/summaries/${summary._id}`);
+    },
+    onError: (err: Error) => toast.error('Error al generar resumen', err.message),
+  });
 
   const { data: doc, isLoading } = useQuery({
     queryKey: ['document', id],
@@ -97,16 +126,45 @@ export function DocumentDetail() {
       </Card>
 
       {doc.status === 'processed' && (
-        <div className="flex gap-3">
-          <Button
-            variant="gradient"
-            onClick={() =>
-              navigate('/quizzes/create', { state: { documentIds: [doc._id] } })
-            }
-          >
-            <Brain className="h-4 w-4" />
-            Generar quiz con este documento
-          </Button>
+        <div>
+          <h2 className="text-base font-semibold mb-3">Generar con IA</h2>
+          <div className="grid sm:grid-cols-3 gap-3">
+            <Button
+              variant="gradient"
+              className="justify-start"
+              onClick={() =>
+                navigate('/quizzes/create', { state: { documentIds: [doc._id] } })
+              }
+            >
+              <Brain className="h-4 w-4" />
+              Quiz · 20–50 cr
+            </Button>
+            <Button
+              variant="outline"
+              className="justify-start border-brand-500/30 hover:border-brand-500/50"
+              disabled={flashcardMutation.isPending || (user?.credits ?? 0) < 10}
+              loading={flashcardMutation.isPending}
+              onClick={() => flashcardMutation.mutate()}
+            >
+              <Zap className="h-4 w-4 text-brand-400" />
+              {flashcardMutation.isPending ? 'Generando...' : 'Flashcards · 10 cr'}
+            </Button>
+            <Button
+              variant="outline"
+              className="justify-start border-purple-500/30 hover:border-purple-500/50"
+              disabled={summaryMutation.isPending || (user?.credits ?? 0) < 15}
+              loading={summaryMutation.isPending}
+              onClick={() => summaryMutation.mutate()}
+            >
+              <BookOpen className="h-4 w-4 text-purple-400" />
+              {summaryMutation.isPending ? 'Generando...' : 'Resumen · 15 cr'}
+            </Button>
+          </div>
+          {(flashcardMutation.isPending || summaryMutation.isPending) && (
+            <p className="text-xs text-muted-foreground mt-2">
+              Esto puede tomar hasta 30 segundos...
+            </p>
+          )}
         </div>
       )}
     </div>

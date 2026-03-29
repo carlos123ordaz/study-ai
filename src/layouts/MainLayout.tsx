@@ -3,6 +3,8 @@ import {
   LayoutDashboard,
   FileText,
   Brain,
+  Zap,
+  BookOpen as SummaryIcon,
   Coins,
   User,
   LogOut,
@@ -23,6 +25,8 @@ const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/documents', icon: FileText, label: 'Documentos' },
   { to: '/quizzes', icon: Brain, label: 'Quizzes' },
+  { to: '/flashcards', icon: Zap, label: 'Flashcards' },
+  { to: '/summaries', icon: SummaryIcon, label: 'Resúmenes' },
   { to: '/credits', icon: Coins, label: 'Créditos' },
   { to: '/profile', icon: User, label: 'Perfil' },
 ];

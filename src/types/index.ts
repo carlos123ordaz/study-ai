@@ -106,12 +106,77 @@ export interface Attempt {
 // ========================
 // Credits
 // ========================
+// ========================
+// Flashcards
+// ========================
+export type FlashcardSetStatus = 'generating' | 'ready' | 'failed';
+
+export interface Flashcard {
+  front: string;
+  back: string;
+}
+
+export interface FlashcardSet {
+  _id: string;
+  userId: string;
+  documentId: string;
+  title: string;
+  cards: Flashcard[];
+  cardCount: number;
+  status: FlashcardSetStatus;
+  creditsUsed: number;
+  errorMessage?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ========================
+// Summaries
+// ========================
+export type SummaryStatus = 'generating' | 'ready' | 'failed';
+
+export interface SummarySection {
+  heading: string;
+  body: string;
+}
+
+export interface KeyTerm {
+  term: string;
+  definition: string;
+}
+
+export interface SummaryContent {
+  overview: string;
+  sections: SummarySection[];
+  keyTerms: KeyTerm[];
+}
+
+export interface Summary {
+  _id: string;
+  userId: string;
+  documentId: string;
+  title: string;
+  content: SummaryContent;
+  status: SummaryStatus;
+  creditsUsed: number;
+  errorMessage?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ========================
+// Credits
+// ========================
 export type TransactionType =
   | 'initial_grant'
   | 'document_processing'
   | 'quiz_generation'
   | 'quiz_generation_refund'
   | 'document_processing_refund'
+  | 'flashcard_generation'
+  | 'flashcard_generation_refund'
+  | 'summary_generation'
+  | 'summary_generation_refund'
   | 'payment_recharge'
   | 'admin_adjustment';
 
